@@ -1,70 +1,76 @@
 package com.gmail.amrnablus.eav.entity;
 
+import java.io.Serializable;
 import javax.persistence.*;
-import javax.persistence.Entity;
-import java.sql.Date;
+import java.util.Date;
+
 
 /**
- * Created by amr on 6/14/16.
+ * The persistent class for the entity_attribute_value_date database table.
+ * 
  */
 @Entity
-@Table(name = "entity_attribute_value_date", schema = "metadata", catalog = "")
-@IdClass(EntityAttributeValueDatePK.class)
-public class EntityAttributeValueDate {
-    private Long entityId;
-    private Long attributeId;
-    private Date attributeValue;
+@Table(name="entity_attribute_value_date")
+@NamedQuery(name="EntityAttributeValueDate.findAll", query="SELECT e FROM EntityAttributeValueDate e")
+public class EntityAttributeValueDate implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "entity_id", nullable = false)
-    public Long getEntityId() {
-        return entityId;
-    }
+	@EmbeddedId
+	private EntityAttributeValueDatePK id;
 
-    public void setEntityId(Long entityId) {
-        this.entityId = entityId;
-    }
+	@Temporal(TemporalType.DATE)
+	@Column(name="attribute_value")
+	private Date attributeValue;
 
-    @Id
-    @Column(name = "attribute_id", nullable = false)
-    public Long getAttributeId() {
-        return attributeId;
-    }
+	//bi-directional many-to-one association to Entity
+	@ManyToOne
+	@JoinColumn(name="entity_id", insertable=false, updatable=false)
+	private EAVEntity entity;
 
-    public void setAttributeId(Long attributeId) {
-        this.attributeId = attributeId;
-    }
+	//bi-directional many-to-one association to EntityAttribute
+	@ManyToOne
+	@JoinColumn(name="attribute_id", insertable=false, updatable=false)
+	private EntityAttribute entityAttribute;
 
-    @Basic
-    @Column(name = "attribute_value", nullable = true)
-    public Date getAttributeValue() {
-        return attributeValue;
-    }
+	public EntityAttributeValueDate() {
+	}
 
-    public void setAttributeValue(Date attributeValue) {
-        this.attributeValue = attributeValue;
-    }
+	public EntityAttributeValueDatePK getId() {
+		return this.id;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	public void setId(EntityAttributeValueDatePK id) {
+		this.id = id;
+	}
 
-        EntityAttributeValueDate that = (EntityAttributeValueDate) o;
+	public Date getAttributeValue() {
+		return this.attributeValue;
+	}
 
-        if (entityId != null ? !entityId.equals(that.entityId) : that.entityId != null) return false;
-        if (attributeId != null ? !attributeId.equals(that.attributeId) : that.attributeId != null) return false;
-        if (attributeValue != null ? !attributeValue.equals(that.attributeValue) : that.attributeValue != null)
-            return false;
+	public void setAttributeValue(Date attributeValue) {
+		this.attributeValue = attributeValue;
+	}
 
-        return true;
-    }
+	public EAVEntity getEntity() {
+		return this.entity;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = entityId != null ? entityId.hashCode() : 0;
-        result = 31 * result + (attributeId != null ? attributeId.hashCode() : 0);
-        result = 31 * result + (attributeValue != null ? attributeValue.hashCode() : 0);
-        return result;
-    }
+	public void setEntity(EAVEntity entity) {
+		this.entity = entity;
+	}
+
+	public EntityAttribute getEntityAttribute() {
+		return this.entityAttribute;
+	}
+
+	public void setEntityAttribute(EntityAttribute entityAttribute) {
+		this.entityAttribute = entityAttribute;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("[EnttiyAttribute]: entity_id: %d, attribute_id: %d, entity_value: %s", 
+				entity.getEntityId(), entityAttribute.getAttributeId(), attributeValue.toString());
+	}
+
 }

@@ -1,54 +1,57 @@
 package com.gmail.amrnablus.eav.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.io.Serializable;
+import javax.persistence.*;
 
 /**
- * Created by amr on 6/14/16.
+ * The primary key class for the entity_attribute_value_date database table.
+ * 
  */
+@Embeddable
 public class EntityAttributeValueDatePK implements Serializable {
-    private Long entityId;
-    private Long attributeId;
+	//default serial version id, required for serializable classes.
+	private static final long serialVersionUID = 1L;
 
-    public void setEntityId(Long entityId) {
-        this.entityId = entityId;
-    }
+	@Column(name="entity_id", insertable=false, updatable=false)
+	private int entityId;
 
-    public void setAttributeId(Long attributeId) {
-        this.attributeId = attributeId;
-    }
+	@Column(name="attribute_id", insertable=false, updatable=false)
+	private int attributeId;
 
-    @Column(name = "entity_id", nullable = false)
-    @Id
-    public Long getEntityId() {
-        return entityId;
-    }
+	public EntityAttributeValueDatePK() {
+	}
+	public int getEntityId() {
+		return this.entityId;
+	}
+	public void setEntityId(int entityId) {
+		this.entityId = entityId;
+	}
+	public int getAttributeId() {
+		return this.attributeId;
+	}
+	public void setAttributeId(int attributeId) {
+		this.attributeId = attributeId;
+	}
 
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (!(other instanceof EntityAttributeValueDatePK)) {
+			return false;
+		}
+		EntityAttributeValueDatePK castOther = (EntityAttributeValueDatePK)other;
+		return 
+			(this.entityId == castOther.entityId)
+			&& (this.attributeId == castOther.attributeId);
+	}
 
-    @Column(name = "attribute_id", nullable = false)
-    @Id
-    public Long getAttributeId() {
-        return attributeId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EntityAttributeValueDatePK that = (EntityAttributeValueDatePK) o;
-
-        if (entityId != that.entityId) return false;
-        if (attributeId != that.attributeId) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        Long result = entityId;
-        result = 31 * result + attributeId;
-        return result.intValue();
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int hash = 17;
+		hash = hash * prime + this.entityId;
+		hash = hash * prime + this.attributeId;
+		
+		return hash;
+	}
 }

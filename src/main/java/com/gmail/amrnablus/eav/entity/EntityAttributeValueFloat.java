@@ -1,69 +1,69 @@
 package com.gmail.amrnablus.eav.entity;
 
+import java.io.Serializable;
 import javax.persistence.*;
-import javax.persistence.Entity;
+import java.math.BigDecimal;
+
 
 /**
- * Created by amr on 6/14/16.
+ * The persistent class for the entity_attribute_value_float database table.
+ * 
  */
 @Entity
-@Table(name = "entity_attribute_value_float", schema = "metadata", catalog = "")
-@IdClass(EntityAttributeValueFloatPK.class)
-public class EntityAttributeValueFloat {
-    private Long attributeId;
-    private Long entityId;
-    private Double attributeValue;
+@Table(name="entity_attribute_value_float")
+@NamedQuery(name="EntityAttributeValueFloat.findAll", query="SELECT e FROM EntityAttributeValueFloat e")
+public class EntityAttributeValueFloat implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "attribute_id", nullable = false)
-    public Long getAttributeId() {
-        return attributeId;
-    }
+	@EmbeddedId
+	private EntityAttributeValueFloatPK id;
 
-    public void setAttributeId(Long attributeId) {
-        this.attributeId = attributeId;
-    }
+	@Column(name="attribute_value")
+	private BigDecimal attributeValue;
 
-    @Id
-    @Column(name = "entity_id", nullable = false)
-    public Long getEntityId() {
-        return entityId;
-    }
+	//bi-directional many-to-one association to Entity
+	@ManyToOne
+	@JoinColumn(name="entity_id", insertable=false, updatable=false)
+	private EAVEntity entity;
 
-    public void setEntityId(Long entityId) {
-        this.entityId = entityId;
-    }
+	//bi-directional many-to-one association to EntityAttribute
+	@ManyToOne
+	@JoinColumn(name="attribute_id", insertable=false, updatable=false)
+	private EntityAttribute entityAttribute;
 
-    @Basic
-    @Column(name = "attribute_value", nullable = true, precision = 0)
-    public Double getAttributeValue() {
-        return attributeValue;
-    }
+	public EntityAttributeValueFloat() {
+	}
 
-    public void setAttributeValue(Double attributeValue) {
-        this.attributeValue = attributeValue;
-    }
+	public EntityAttributeValueFloatPK getId() {
+		return this.id;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	public void setId(EntityAttributeValueFloatPK id) {
+		this.id = id;
+	}
 
-        EntityAttributeValueFloat that = (EntityAttributeValueFloat) o;
+	public BigDecimal getAttributeValue() {
+		return this.attributeValue;
+	}
 
-        if (attributeId != null ? !attributeId.equals(that.attributeId) : that.attributeId != null) return false;
-        if (entityId != null ? !entityId.equals(that.entityId) : that.entityId != null) return false;
-        if (attributeValue != null ? !attributeValue.equals(that.attributeValue) : that.attributeValue != null)
-            return false;
+	public void setAttributeValue(BigDecimal attributeValue) {
+		this.attributeValue = attributeValue;
+	}
 
-        return true;
-    }
+	public EAVEntity getEntity() {
+		return this.entity;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = attributeId != null ? attributeId.hashCode() : 0;
-        result = 31 * result + (entityId != null ? entityId.hashCode() : 0);
-        result = 31 * result + (attributeValue != null ? attributeValue.hashCode() : 0);
-        return result;
-    }
+	public void setEntity(EAVEntity entity) {
+		this.entity = entity;
+	}
+
+	public EntityAttribute getEntityAttribute() {
+		return this.entityAttribute;
+	}
+
+	public void setEntityAttribute(EntityAttribute entityAttribute) {
+		this.entityAttribute = entityAttribute;
+	}
+
 }

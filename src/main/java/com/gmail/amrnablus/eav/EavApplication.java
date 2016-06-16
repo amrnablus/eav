@@ -1,6 +1,7 @@
 package com.gmail.amrnablus.eav;
 
-import com.gmail.amrnablus.eav.entity.Entity;
+
+import com.gmail.amrnablus.eav.repository.EntityAttributeRepository;
 import com.gmail.amrnablus.eav.service.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,9 @@ public class EavApplication implements CommandLineRunner {
 	@Autowired
 	EntityService entityService;
 
+    @Autowired
+    EntityAttributeRepository entityAttributeRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(EavApplication.class, args);
 	}
@@ -23,6 +27,10 @@ public class EavApplication implements CommandLineRunner {
         System.out.println(
                 entityService.getEntityById(1L)
         );
+//        System.out.println(
+//                entityAttributeRepository.findOne(1L)
+//        );
+
 
     }
 }

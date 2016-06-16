@@ -1,6 +1,6 @@
 package com.gmail.amrnablus.eav.service;
 
-import com.gmail.amrnablus.eav.entity.Entity;
+import com.gmail.amrnablus.eav.entity.EAVEntity;
 import com.gmail.amrnablus.eav.repository.EntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class EntityService {
     @Autowired
     EntityRepository entityRepository;
 
-    public Entity getEntityById(Long id) {
+    public EAVEntity getEntityById(Long id) {
         return entityRepository.findOne(id);
     }
 }

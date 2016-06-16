@@ -1,89 +1,99 @@
 package com.gmail.amrnablus.eav.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
- * The persistent class for the entity_attribute database table.
+ * The persistent class for the entity database table.
  * 
  */
 @Entity
-@Table(name="entity_attribute")
-@NamedQuery(name="EntityAttribute.findAll", query="SELECT e FROM EntityAttribute e")
-public class EntityAttribute implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Table(name="entity")
+@NamedQuery(name="EAVEntity.findAll", query="SELECT e FROM EAVEntity e")
+public class EAVEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="attribute_id")
-	private Long attributeId;
+	@Column(name="entity_id")
+	private Long entityId;
 
 	@Column(name="entity_type")
-	private String entityType;
+	private Long entityType;
 
-	@Column(name="is_required")
-	private byte isRequired;
-
-	//bi-directional many-to-one association to Entity
-	@ManyToOne
-	@JoinColumn(name="entity_id")
-	private EAVEntity entity;
+	//bi-directional many-to-one association to EntityAttribute
+	@OneToMany(mappedBy="entity")
+	private List<EntityAttribute> entityAttributes;
 
 	//bi-directional many-to-one association to EntityAttributeValueDate
-	@OneToMany(mappedBy="entityAttribute")
+	@OneToMany(mappedBy="entity")
 	private List<EntityAttributeValueDate> entityAttributeValueDates;
 
 	//bi-directional many-to-one association to EntityAttributeValueDatetime
-	@OneToMany(mappedBy="entityAttribute")
+	@OneToMany(mappedBy="entity")
 	private List<EntityAttributeValueDatetime> entityAttributeValueDatetimes;
 
 	//bi-directional many-to-one association to EntityAttributeValueFloat
-	@OneToMany(mappedBy="entityAttribute")
+	@OneToMany(mappedBy="entity")
 	private List<EntityAttributeValueFloat> entityAttributeValueFloats;
 
 	//bi-directional many-to-one association to EntityAttributeValueInt
-	@OneToMany(mappedBy="entityAttribute")
+	@OneToMany(mappedBy="entity", fetch=FetchType.EAGER)
 	private List<EntityAttributeValueInt> entityAttributeValueInts;
 
 	//bi-directional many-to-one association to EntityAttributeValueString
-	@OneToMany(mappedBy="entityAttribute")
+	@OneToMany(mappedBy="entity")
 	private List<EntityAttributeValueString> entityAttributeValueStrings;
 
-	public EntityAttribute() {
+	public EAVEntity() {
 	}
 
-	public Long getAttributeId() {
-		return this.attributeId;
+	public Long getEntityId() {
+		return this.entityId;
 	}
 
-	public void setAttributeId(Long attributeId) {
-		this.attributeId = attributeId;
+	public void setEntityId(Long entityId) {
+		this.entityId = entityId;
 	}
 
-	public String getEntityType() {
+	public Long getEntityType() {
 		return this.entityType;
 	}
 
-	public void setEntityType(String entityType) {
+	public void setEntityType(Long entityType) {
 		this.entityType = entityType;
 	}
 
-	public byte getIsRequired() {
-		return this.isRequired;
+	public List<EntityAttribute> getEntityAttributes() {
+		return this.entityAttributes;
 	}
 
-	public void setIsRequired(byte isRequired) {
-		this.isRequired = isRequired;
+	public void setEntityAttributes(List<EntityAttribute> entityAttributes) {
+		this.entityAttributes = entityAttributes;
 	}
 
-	public EAVEntity getEntity() {
-		return this.entity;
+	public EntityAttribute addEntityAttribute(EntityAttribute entityAttribute) {
+		getEntityAttributes().add(entityAttribute);
+		entityAttribute.setEntity(this);
+
+		return entityAttribute;
 	}
 
-	public void setEntity(EAVEntity entity) {
-		this.entity = entity;
+	public EntityAttribute removeEntityAttribute(EntityAttribute entityAttribute) {
+		getEntityAttributes().remove(entityAttribute);
+		entityAttribute.setEntity(null);
+
+		return entityAttribute;
 	}
 
 	public List<EntityAttributeValueDate> getEntityAttributeValueDates() {
@@ -96,14 +106,14 @@ public class EntityAttribute implements Serializable {
 
 	public EntityAttributeValueDate addEntityAttributeValueDate(EntityAttributeValueDate entityAttributeValueDate) {
 		getEntityAttributeValueDates().add(entityAttributeValueDate);
-		entityAttributeValueDate.setEntityAttribute(this);
+		entityAttributeValueDate.setEntity(this);
 
 		return entityAttributeValueDate;
 	}
 
 	public EntityAttributeValueDate removeEntityAttributeValueDate(EntityAttributeValueDate entityAttributeValueDate) {
 		getEntityAttributeValueDates().remove(entityAttributeValueDate);
-		entityAttributeValueDate.setEntityAttribute(null);
+		entityAttributeValueDate.setEntity(null);
 
 		return entityAttributeValueDate;
 	}
@@ -118,14 +128,14 @@ public class EntityAttribute implements Serializable {
 
 	public EntityAttributeValueDatetime addEntityAttributeValueDatetime(EntityAttributeValueDatetime entityAttributeValueDatetime) {
 		getEntityAttributeValueDatetimes().add(entityAttributeValueDatetime);
-		entityAttributeValueDatetime.setEntityAttribute(this);
+		entityAttributeValueDatetime.setEntity(this);
 
 		return entityAttributeValueDatetime;
 	}
 
 	public EntityAttributeValueDatetime removeEntityAttributeValueDatetime(EntityAttributeValueDatetime entityAttributeValueDatetime) {
 		getEntityAttributeValueDatetimes().remove(entityAttributeValueDatetime);
-		entityAttributeValueDatetime.setEntityAttribute(null);
+		entityAttributeValueDatetime.setEntity(null);
 
 		return entityAttributeValueDatetime;
 	}
@@ -140,14 +150,14 @@ public class EntityAttribute implements Serializable {
 
 	public EntityAttributeValueFloat addEntityAttributeValueFloat(EntityAttributeValueFloat entityAttributeValueFloat) {
 		getEntityAttributeValueFloats().add(entityAttributeValueFloat);
-		entityAttributeValueFloat.setEntityAttribute(this);
+		entityAttributeValueFloat.setEntity(this);
 
 		return entityAttributeValueFloat;
 	}
 
 	public EntityAttributeValueFloat removeEntityAttributeValueFloat(EntityAttributeValueFloat entityAttributeValueFloat) {
 		getEntityAttributeValueFloats().remove(entityAttributeValueFloat);
-		entityAttributeValueFloat.setEntityAttribute(null);
+		entityAttributeValueFloat.setEntity(null);
 
 		return entityAttributeValueFloat;
 	}
@@ -162,14 +172,14 @@ public class EntityAttribute implements Serializable {
 
 	public EntityAttributeValueInt addEntityAttributeValueInt(EntityAttributeValueInt entityAttributeValueInt) {
 		getEntityAttributeValueInts().add(entityAttributeValueInt);
-		entityAttributeValueInt.setEntityAttribute(this);
+		entityAttributeValueInt.setEntity(this);
 
 		return entityAttributeValueInt;
 	}
 
 	public EntityAttributeValueInt removeEntityAttributeValueInt(EntityAttributeValueInt entityAttributeValueInt) {
 		getEntityAttributeValueInts().remove(entityAttributeValueInt);
-		entityAttributeValueInt.setEntityAttribute(null);
+		entityAttributeValueInt.setEntity(null);
 
 		return entityAttributeValueInt;
 	}
@@ -184,23 +194,20 @@ public class EntityAttribute implements Serializable {
 
 	public EntityAttributeValueString addEntityAttributeValueString(EntityAttributeValueString entityAttributeValueString) {
 		getEntityAttributeValueStrings().add(entityAttributeValueString);
-		entityAttributeValueString.setEntityAttribute(this);
+		entityAttributeValueString.setEntity(this);
 
 		return entityAttributeValueString;
 	}
 
 	public EntityAttributeValueString removeEntityAttributeValueString(EntityAttributeValueString entityAttributeValueString) {
 		getEntityAttributeValueStrings().remove(entityAttributeValueString);
-		entityAttributeValueString.setEntityAttribute(null);
+		entityAttributeValueString.setEntity(null);
 
 		return entityAttributeValueString;
 	}
 	
-	@Override
 	public String toString() {
-		return String.format("[EnttiyAttribute]: entity_id: %d, attribute_id: %d", 
-				entity.getEntityId(), attributeId );
+		return String.format("[EAVEntity]: enttiy_id: %d, attributes: %s", entityId, entityAttributeValueInts.toString());
 	}
-
 
 }
